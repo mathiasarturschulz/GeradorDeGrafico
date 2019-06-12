@@ -2,8 +2,7 @@
     require_once "inc/Header.php";
     require_once "autoload.php";
     echo "<br>";
-
-    // header('Location: ViewPrincipal.class.php');
+    // header('Location: ClasseASerChanada.class.php');
     
     /*
     -- Google Charts:
@@ -18,44 +17,154 @@
 
     Montar uma classe para o usuário montar um gráfico.
     */
+
+    $aGraficos = [
+        1 => 'Gráfico de Barra',
+        2 => 'Gráfico de Linha',
+        3 => 'Gráfico de Pizza'
+    ];
+    $sGraficos = generateSelectChart($aGraficos);
+
+    function generateSelectChart($aGraficos)
+    {
+        $sGraficos = "<option value=\"0\">Selecione um gráfico </option>";
+        if ($aGraficos) {
+            $sGraficos = "";
+            foreach ($aGraficos as $chave => $oInfo) {
+                $sGraficos .= ""
+                    . "<option value=\"$chave\">" . ($chave . " - " . $oInfo) . "</option>"
+                ;
+            }
+        }
+        
+        return $sGraficos;
+    }
+
+    $titulo = isset($_POST['titulo']) ? $_POST['titulo'] : "";
+    $legenda = isset($_POST['legenda']) ? $_POST['legenda'] : "";
+    $nomeEixoX = isset($_POST['nomeEixoX']) ? $_POST['nomeEixoX'] : "";
+    $nomeEixoY = isset($_POST['nomeEixoY']) ? $_POST['nomeEixoY'] : "";
+    $arrayEixoX = isset($_POST['arrayEixoX']) ? $_POST['arrayEixoX'] : [];
+    $arrayEixoY = isset($_POST['arrayEixoY']) ? $_POST['arrayEixoY'] : [];
+    
+    $oBarra = new Barra($titulo, $legenda, $nomeEixoX, $nomeEixoY, $arrayEixoX, $arrayEixoY);
+    echo $oBarra;
+    echo $oBarra->gerarGrafico();
+
+    $table = "";
 ?>
 
+<div class="container">
+    <h2 class="col-sm-6">Gerador de gráficos...</h2><br>
 
-<div id="grafico_barra"></div>
+    <form action="" method="post">
+        <!--ESCONDER UM CAMPO: style="display:none;"-->
+        <label for="Z">Tipo de gráfico a ser gerado: </label>
+        <select id="select" name="select">
+            <?= $sGraficos?>
+        </select>
 
+        <!--GRAFICO DE BARRA - titulo, legenda, nomeEixoX, nomeEixoY, arrayNomeValor-->
+
+        <br><br>
+        <h2 id="nomeGrafico" class="col-sm-6">Valor</h2><br>
+        <label for="Z" id="label_titulo">Título: </label>
+        <input type="text" id="titulo" name="titulo"  value="<?= $titulo;?>">
+        <label for="Z" id="label_legenda">Legenda: </label>
+        <input type="text" id="legenda" name="legenda"  value="<?= $legenda;?>">
+        <label for="Z" id="label_nomeEixoX">Nome Eixo X: </label>
+        <input type="text" id="nomeEixoX" name="nomeEixoX"  value="<?= $nomeEixoX;?>">
+        <label for="Z" id="label_nomeEixoY">Nome Eixo Y: </label>
+        <input type="text" id="nomeEixoY" name="nomeEixoY"  value="<?= $nomeEixoY;?>">
+        <br><br>
+        <table id="table" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Valores de X</th>
+                    <th>Valores de Y</th>
+                    <th><input type="button" class="btn btn-primary" onclick="adicionaLinha('table')" value="Nova Linha"><th>
+                </tr>
+            </thead>
+            <?= $table?>
+        </table>
+
+        
+		<div style="text-align: right;">
+		<input type="submit" class="btn btn-outline-primary" id="confirmar" name="confirmar" value="Gerar Gráfico">
+		</div>
+    </form><br>
+</div>
+
+
+<br><br><br>
 <script>
-google.charts.load('current', {packages: ['corechart', 'bar']});
-google.charts.setOnLoadCallback(drawBasic);
+function myFunction()
+{
+    
+document.getElementById('nomeGrafico').innerText = 'TESTE';
 
-function drawBasic() {
-    var data = google.visualization.arrayToDataTable([
-        ['City', '2010 Population',],
-        ['New York City, NY', 8175000],
-        ['Los Angeles, CA', 3792000],
-        ['Chicago, IL', 2695000],
-        ['Houston, TX', 2099000],
-        ['Philadelphia, PA', 1526000]
-    ]);
+var x=document.getElementById('nomeGrafico');
+x.value=x.value.toUpperCase();
 
-    var options = {
-        title: 'Population of Largest U.S. Cities',
-        chartArea: {
-            width: '50%'
-        },
-        hAxis: {
-            title: 'Total Population',
-            minValue: 0
-        },
-        vAxis: {
-            title: 'City'
-        }
-    };
-
-    var chart = new google.visualization.BarChart(document.getElementById('grafico_barra'));
-
-    chart.draw(data, options);
+document.getElementById('label_titulo').disabled = true
+document.getElementById('titulo').disabled = true
+document.getElementById('legenda').disabled = true
+document.getElementById('label_legenda').disabled = true
+document.getElementById('label_legenda').hidden = true
 }
 </script>
+</head>
+<body>
+ 
+Insira seu Nome: <input type="text" id="fname" onchange="myFunction()">
+<p>
+Ao clicarmos fora do input text o texto escrito nele ficará todo em caixa alta.</p>
+
+
+<div id="grafico"></div>
+
+
+
+<!--
+google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawBasic);
+
+        function drawBasic() {
+
+            //titulo, legenda, nomeEixoX, nomeEixoY, arrayNomeValor
+
+            var data = google.visualization.arrayToDataTable([
+                ['City', '2010 Population',],
+                ['New York City, NY', 8175000],
+                ['Los Angeles, CA', 3792000],
+                ['Chicago, IL', 2695000],
+                ['Houston, TX', 2099000],
+                ['Philadelphia, PA', 1526000]
+            ]);
+
+            console.log(data)
+
+            var options = {
+                title: 'Population of Largest U.S. Cities',
+                chartArea: {
+                    width: '50%'
+                },
+                hAxis: {
+                    title: 'Total Population',
+                    minValue: 0
+                },
+                vAxis: {
+                    title: 'City'
+                }
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById('grafico'));
+
+            chart.draw(data, options);
+
+            
+
+
 
 
 <div id="grafico_linha"></div>
@@ -65,8 +174,11 @@ google.charts.load('current', {packages: ['corechart', 'line']});
 google.charts.setOnLoadCallback(drawBasic);
 
 function drawBasic() {
+
+    //titulo, legenda, nomeEixoX, nomeEixoY, arrayPontos
+
     var data = new google.visualization.DataTable();
-    data.addColumn('number', 'X');
+    data.addColumn('number', '1X111');
     data.addColumn('number', 'Dogs');
 
     data.addRows([
@@ -85,7 +197,7 @@ function drawBasic() {
     ]);
 
     var options = {
-        title: 'Dogs',
+        title: 'Dogs 123',
         hAxis: {
             title: 'Time'
         },
@@ -101,6 +213,7 @@ function drawBasic() {
 </script>
 
 
+
 <div id="grafico_pizza" style="width: 900px; height: 500px;"></div>
 
 <script>
@@ -108,6 +221,8 @@ google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
+
+    //titulo, arrayNomeValor
 
     var data = google.visualization.arrayToDataTable([
         ['Task', 'Hours per Day'],
@@ -127,6 +242,7 @@ function drawChart() {
     chart.draw(data, options);
 }
 </script>
+-->
 
 <?php
     require_once "inc/Footer.php";

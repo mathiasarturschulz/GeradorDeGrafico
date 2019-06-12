@@ -2,7 +2,7 @@
 
 include_once "Grafico.class.php";
 
-class Barra extends Grafico {
+class Linha extends Grafico {
 
     private $legenda;
     private $nomeEixoX;
@@ -78,57 +78,8 @@ class Barra extends Grafico {
         return $this;
     }
 
-    public function gerarGrafico() {
-
-        /*$data = [];
-        for ($i = 0; $i < parent::getArrayValorX(); $i++) { 
-            if (!isset(parent::getArrayValorX()[$i]) || !isset(parent::getArrayValorY()[$i])) {
-                //throw new Exception('ERRO!');
-                return false;
-            }
-            $data[] = [
-                parent::getArrayValorX()[$i],
-                parent::getArrayValorY()[$i]
-            ];
-        }*/
-
-        echo 'teste';
-        $scriptSql = ""
-            . "<script>"
-            . "//function drawBasic() {
-
-            //titulo, legenda, nomeEixoX, nomeEixoY, arrayNomeValor
-
-            var data = google.visualization.arrayToDataTable();
-
-            console.log(data)
-
-            var options = {
-                title: 'Population of Largest U.S. Cities',
-                chartArea: {
-                    width: '50%'
-                },
-                hAxis: {
-                    title: 'Total Population',
-                    minValue: 0
-                },
-                vAxis: {
-                    title: 'City'
-                }
-            };
-
-            var chart = new google.visualization.BarChart(document.getElementById('grafico'));
-
-            chart.draw(data, options);"
-            . "//}"
-            . "</script>";
-
-        return $scriptSql;
-        //return "<script> console.log('teste') </script>";
-    }
-
     public function __toString() {
-        return "{ Barra: "
+        return "{ Linha: "
             . parent::__toString()
             . " Legenda = " . $this->getLegenda()
             . " Nome Eixo X = " . $this->getNomeEixoX()
