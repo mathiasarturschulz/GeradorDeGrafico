@@ -3,8 +3,8 @@
 abstract class Grafico {
 
     private $titulo;
-    private $arrayValorX;
-    private $arrayValorY;
+    private $arrayValorX = [];
+    private $arrayValorY = [];
 
     public function __construct($titulo, $arrayValorX, $arrayValorY) 
     {

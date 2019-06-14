@@ -80,28 +80,54 @@ class Barra extends Grafico {
 
     public function gerarGrafico() {
 
-        /*$data = [];
-        for ($i = 0; $i < parent::getArrayValorX(); $i++) { 
+        $data = [];
+        echo "<br><br>gerarGrafico<br><br>";
+        echo var_dump(parent::getArrayValorX());
+        echo var_dump(parent::getArrayValorY());
+
+        for ($i = 0; $i < sizeof(parent::getArrayValorX()); $i++) { 
             if (!isset(parent::getArrayValorX()[$i]) || !isset(parent::getArrayValorY()[$i])) {
                 //throw new Exception('ERRO!');
-                return false;
+                //return false;
+                echo "ERRO";
+            } else {
+                $data[] = [
+                    parent::getArrayValorX()[$i],
+                    parent::getArrayValorY()[$i]
+                ];
             }
-            $data[] = [
-                parent::getArrayValorX()[$i],
-                parent::getArrayValorY()[$i]
-            ];
-        }*/
+            
+        }
 
-        echo 'teste';
-        $scriptSql = ""
+        echo var_dump($data);
+        echo "teste";
+        $scriptJS = ""
             . "<script>"
-            . "//function drawBasic() {
+            
+            /*google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawBasic);*/
+
+            //function drawBasic() {
 
             //titulo, legenda, nomeEixoX, nomeEixoY, arrayNomeValor
 
-            var data = google.visualization.arrayToDataTable();
+            . "var arrayData = [];";
+            foreach ($data as $chave => $valor) {
+                $scriptJS .= "arrayData.push([ {$valor[0]} , {$valor[1]} ]);";
+            }
 
-            console.log(data)
+            $scriptJS .= ""
+            . "console.log(arrayData);"
+            /*. "var data = google.visualization.arrayToDataTable(["
+            . "    ['City', '2010 Population',],"
+            . "    ['New York City, NY', 8175000],"
+            . "    ['Los Angeles, CA', 3792000],"
+            . "    ['Chicago, IL', 2695000],"
+            . "    ['Houston, TX', 2099000],"
+            . "    ['Philadelphia, PA', 1526000]"
+            . "]);"
+
+            /*console.log(data)
 
             var options = {
                 title: 'Population of Largest U.S. Cities',
@@ -119,11 +145,10 @@ class Barra extends Grafico {
 
             var chart = new google.visualization.BarChart(document.getElementById('grafico'));
 
-            chart.draw(data, options);"
-            . "//}"
+            chart.draw(data, options);*/
             . "</script>";
 
-        return $scriptSql;
+        return $scriptJS;
         //return "<script> console.log('teste') </script>";
     }
 

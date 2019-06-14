@@ -49,6 +49,7 @@
     
     $oBarra = new Barra($titulo, $legenda, $nomeEixoX, $nomeEixoY, $arrayEixoX, $arrayEixoY);
     echo $oBarra;
+    echo "chamou";
     echo $oBarra->gerarGrafico();
 
     $table = "";
