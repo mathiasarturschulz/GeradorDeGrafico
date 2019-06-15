@@ -79,77 +79,45 @@ class Barra extends Grafico {
     }
 
     public function gerarGrafico() {
-
         $data = [];
-        echo "<br><br>gerarGrafico<br><br>";
-        echo var_dump(parent::getArrayValorX());
-        echo var_dump(parent::getArrayValorY());
-
         for ($i = 0; $i < sizeof(parent::getArrayValorX()); $i++) { 
             if (!isset(parent::getArrayValorX()[$i]) || !isset(parent::getArrayValorY()[$i])) {
-                //throw new Exception('ERRO!');
-                //return false;
-                echo "ERRO";
-            } else {
-                $data[] = [
-                    parent::getArrayValorX()[$i],
-                    parent::getArrayValorY()[$i]
-                ];
+                return "Erro ao gerar valores da tabela! ";
             }
-            
+            $data[] = [
+                parent::getArrayValorX()[$i],
+                parent::getArrayValorY()[$i]
+            ];
+        }
+        if (!$data) {
+            return "Sem valores Informados!! ";
         }
 
-        echo var_dump($data);
-        echo "teste";
         $scriptJS = ""
             . "<script>"
+            . "google.charts.load('current', {packages: ['corechart', 'bar']});"
+            . "google.charts.setOnLoadCallback(function() { "
+            . "    var arrayData = [];"
+            . "    arrayData.push(['Table', '" . $this->getLegenda() . "']);";
             
-            /*google.charts.load('current', {packages: ['corechart', 'bar']});
-            google.charts.setOnLoadCallback(drawBasic);*/
-
-            //function drawBasic() {
-
-            //titulo, legenda, nomeEixoX, nomeEixoY, arrayNomeValor
-
-            . "var arrayData = [];";
             foreach ($data as $chave => $valor) {
-                $scriptJS .= "arrayData.push([ {$valor[0]} , {$valor[1]} ]);";
+                $scriptJS .= "arrayData.push(['{$valor[0]}', {$valor[1]}]);";
             }
 
             $scriptJS .= ""
-            . "console.log(arrayData);"
-            /*. "var data = google.visualization.arrayToDataTable(["
-            . "    ['City', '2010 Population',],"
-            . "    ['New York City, NY', 8175000],"
-            . "    ['Los Angeles, CA', 3792000],"
-            . "    ['Chicago, IL', 2695000],"
-            . "    ['Houston, TX', 2099000],"
-            . "    ['Philadelphia, PA', 1526000]"
-            . "]);"
-
-            /*console.log(data)
-
-            var options = {
-                title: 'Population of Largest U.S. Cities',
-                chartArea: {
-                    width: '50%'
-                },
-                hAxis: {
-                    title: 'Total Population',
-                    minValue: 0
-                },
-                vAxis: {
-                    title: 'City'
-                }
-            };
-
-            var chart = new google.visualization.BarChart(document.getElementById('grafico'));
-
-            chart.draw(data, options);*/
+            . "    var data = google.visualization.arrayToDataTable(arrayData);"
+            . "    var options = { "
+            . "        title: '" . parent::getTitulo() . "',"
+            . "        chartArea: {width: '50%'},"
+            . "        hAxis: { title: '" . $this->getNomeEixoY() ."', minValue: 0 },"
+            . "        vAxis: { title: '" . $this->getNomeEixoX() . "'}"
+            . "    };"
+            . "    var chart = new google.visualization.BarChart(document.getElementById('grafico_barra'));"
+            . "    chart.draw(data, options);"
+            . "});"
             . "</script>";
 
-        return $scriptJS;
-        //return "<script> console.log('teste') </script>";
+        return $scriptJS;  
     }
 
     public function __toString() {

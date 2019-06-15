@@ -2,8 +2,7 @@
     require_once "inc/Header.php";
     require_once "autoload.php";
     echo "<br>";
-    // header('Location: ClasseASerChanada.class.php');
-    
+
     /*
     -- Google Charts:
     - Gráfico de Barra
@@ -18,150 +17,73 @@
     Montar uma classe para o usuário montar um gráfico.
     */
 
-    $aGraficos = [
-        1 => 'Gráfico de Barra',
-        2 => 'Gráfico de Linha',
-        3 => 'Gráfico de Pizza'
+    $titulo = "Cinco Cidades mais Populosas do Brasil";
+    $legenda = "Número de Habitantes por Cidade";
+    $nomeEixoX = "Cidade";
+    $nomeEixoY = "Total de Habitantes (em milhões)";
+    $arrayEixoX = [
+        'Fortaleza (CE)',
+        'São Paulo (SP)',
+        'Brasília (DF)',
+        'Salvador (BA)',
+        'Rio de Janeiro (RJ)'
     ];
-    $sGraficos = generateSelectChart($aGraficos);
+    $arrayEixoY = [
+        2627482,
+        12106920,
+        3039444,
+        2953986,
+        6520266
+    ];
 
-    function generateSelectChart($aGraficos)
-    {
-        $sGraficos = "<option value=\"0\">Selecione um gráfico </option>";
-        if ($aGraficos) {
-            $sGraficos = "";
-            foreach ($aGraficos as $chave => $oInfo) {
-                $sGraficos .= ""
-                    . "<option value=\"$chave\">" . ($chave . " - " . $oInfo) . "</option>"
-                ;
-            }
-        }
-        
-        return $sGraficos;
-    }
-
-    $titulo = isset($_POST['titulo']) ? $_POST['titulo'] : "";
-    $legenda = isset($_POST['legenda']) ? $_POST['legenda'] : "";
-    $nomeEixoX = isset($_POST['nomeEixoX']) ? $_POST['nomeEixoX'] : "";
-    $nomeEixoY = isset($_POST['nomeEixoY']) ? $_POST['nomeEixoY'] : "";
-    $arrayEixoX = isset($_POST['arrayEixoX']) ? $_POST['arrayEixoX'] : [];
-    $arrayEixoY = isset($_POST['arrayEixoY']) ? $_POST['arrayEixoY'] : [];
-    
     $oBarra = new Barra($titulo, $legenda, $nomeEixoX, $nomeEixoY, $arrayEixoX, $arrayEixoY);
-    echo $oBarra;
-    echo "chamou";
     echo $oBarra->gerarGrafico();
-
-    $table = "";
+    
 ?>
 
-<div class="container">
-    <h2 class="col-sm-6">Gerador de gráficos...</h2><br>
-
-    <form action="" method="post">
-        <!--ESCONDER UM CAMPO: style="display:none;"-->
-        <label for="Z">Tipo de gráfico a ser gerado: </label>
-        <select id="select" name="select">
-            <?= $sGraficos?>
-        </select>
-
-        <!--GRAFICO DE BARRA - titulo, legenda, nomeEixoX, nomeEixoY, arrayNomeValor-->
-
-        <br><br>
-        <h2 id="nomeGrafico" class="col-sm-6">Valor</h2><br>
-        <label for="Z" id="label_titulo">Título: </label>
-        <input type="text" id="titulo" name="titulo"  value="<?= $titulo;?>">
-        <label for="Z" id="label_legenda">Legenda: </label>
-        <input type="text" id="legenda" name="legenda"  value="<?= $legenda;?>">
-        <label for="Z" id="label_nomeEixoX">Nome Eixo X: </label>
-        <input type="text" id="nomeEixoX" name="nomeEixoX"  value="<?= $nomeEixoX;?>">
-        <label for="Z" id="label_nomeEixoY">Nome Eixo Y: </label>
-        <input type="text" id="nomeEixoY" name="nomeEixoY"  value="<?= $nomeEixoY;?>">
-        <br><br>
-        <table id="table" class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Valores de X</th>
-                    <th>Valores de Y</th>
-                    <th><input type="button" class="btn btn-primary" onclick="adicionaLinha('table')" value="Nova Linha"><th>
-                </tr>
-            </thead>
-            <?= $table?>
-        </table>
-
-        
-		<div style="text-align: right;">
-		<input type="submit" class="btn btn-outline-primary" id="confirmar" name="confirmar" value="Gerar Gráfico">
-		</div>
-    </form><br>
-</div>
-
-
-<br><br><br>
-<script>
-function myFunction()
-{
-    
-document.getElementById('nomeGrafico').innerText = 'TESTE';
-
-var x=document.getElementById('nomeGrafico');
-x.value=x.value.toUpperCase();
-
-document.getElementById('label_titulo').disabled = true
-document.getElementById('titulo').disabled = true
-document.getElementById('legenda').disabled = true
-document.getElementById('label_legenda').disabled = true
-document.getElementById('label_legenda').hidden = true
-}
-</script>
-</head>
-<body>
- 
-Insira seu Nome: <input type="text" id="fname" onchange="myFunction()">
-<p>
-Ao clicarmos fora do input text o texto escrito nele ficará todo em caixa alta.</p>
-
-
-<div id="grafico"></div>
+<div id="grafico_barra"></div>
 
 
 
 <!--
+<script>
 google.charts.load('current', {packages: ['corechart', 'bar']});
-        google.charts.setOnLoadCallback(drawBasic);
+google.charts.setOnLoadCallback(drawBasic);
 
-        function drawBasic() {
+function drawBasic() {
 
-            //titulo, legenda, nomeEixoX, nomeEixoY, arrayNomeValor
+    //titulo, legenda, nomeEixoX, nomeEixoY, arrayNomeValor
 
-            var data = google.visualization.arrayToDataTable([
-                ['City', '2010 Population',],
-                ['New York City, NY', 8175000],
-                ['Los Angeles, CA', 3792000],
-                ['Chicago, IL', 2695000],
-                ['Houston, TX', 2099000],
-                ['Philadelphia, PA', 1526000]
-            ]);
+    var data = google.visualization.arrayToDataTable([
+        ['City', '2010 Population',],
+        ['New York City, NY', 8175000],
+        ['Los Angeles, CA', 3792000],
+        ['Chicago, IL', 2695000],
+        ['Houston, TX', 2099000],
+        ['Philadelphia, PA', 1526000]
+    ]);
 
-            console.log(data)
+    console.log(data)
 
-            var options = {
-                title: 'Population of Largest U.S. Cities',
-                chartArea: {
-                    width: '50%'
-                },
-                hAxis: {
-                    title: 'Total Population',
-                    minValue: 0
-                },
-                vAxis: {
-                    title: 'City'
-                }
-            };
+    var options = {
+        title: 'Population of Largest U.S. Cities',
+        chartArea: {
+            width: '50%'
+        },
+        hAxis: {
+            title: 'Total Population',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'City'
+        }
+    };
 
-            var chart = new google.visualization.BarChart(document.getElementById('grafico'));
+    var chart = new google.visualization.BarChart(document.getElementById('grafico'));
 
-            chart.draw(data, options);
+    chart.draw(data, options);
+}
+</script>
 
             
 
