@@ -78,6 +78,11 @@ class Barra extends Grafico {
         return $this;
     }
 
+    /**
+     * Método responsável por criar um gráfico de barra de acordo com os paramêtros da classe
+     *
+     * @return  string
+     */ 
     public function gerarGrafico() {
         $data = [];
         for ($i = 0; $i < sizeof(parent::getArrayValorX()); $i++) { 
@@ -117,7 +122,7 @@ class Barra extends Grafico {
             . "});"
             . "</script>";
 
-        return $scriptJS;  
+        return $scriptJS;
     }
 
     public function __toString() {
