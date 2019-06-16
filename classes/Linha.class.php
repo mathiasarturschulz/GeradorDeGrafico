@@ -150,8 +150,8 @@ class Linha extends Grafico {
             $scriptJS .= ""
             . "    var options = { "
             . "        title: '" . parent::getTitulo() . "',"
-            . "        hAxis: { title: '" . $this->getNomeEixoY() ."', minValue: 0 },"
-            . "        vAxis: { title: '" . $this->getNomeEixoX() . "'}"
+            . "        hAxis: { title: '" . $this->getNomeEixoX() ."', minValue: 0 },"
+            . "        vAxis: { title: '" . $this->getNomeEixoY() . "'}"
             . "    };"
             . "    var chart = new google.visualization.LineChart(document.getElementById('grafico_linha'));"
             . "    chart.draw(data, options);"
@@ -166,6 +166,7 @@ class Linha extends Grafico {
             . parent::__toString()
             . " Legenda = " . $this->getLegenda()
             . " Nome Eixo X = " . $this->getNomeEixoX()
+            . " Tipo Eixo X = " . $this->getTipoColunaX()
             . " Nome Eixo Y = " . $this->getNomeEixoY() . " }";
     }
 }

@@ -39,7 +39,9 @@
     $oBarra = new Barra($titulo, $legenda, $nomeEixoX, $nomeEixoY, $arrayEixoX, $arrayEixoY);
     echo $oBarra->gerarGrafico();
 
+    
     $tipoColunaX = Linha::TIPO_PALAVRA;
+
     $oLinha = new Linha($titulo, $legenda, $nomeEixoX, $tipoColunaX, $nomeEixoY, $arrayEixoX, $arrayEixoY);
     echo $oLinha->gerarGrafico();
     
