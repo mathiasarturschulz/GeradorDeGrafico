@@ -4,18 +4,20 @@ include_once "Grafico.class.php";
 
 class Linha extends Grafico {
 
-    const TIPO_PALAVRA = 'string';
-    const TIPO_NUMERO = 'number';
+    const TIPO_PALAVRA = "string";
+    const TIPO_NUMERO = "number";
 
     private $legenda;
     private $nomeEixoX;
+    private $tipoColunaX;
     private $nomeEixoY;
 
-    public function __construct($titulo, $legenda, $nomeEixoX, $nomeEixoY, $arrayValorX, $arrayValorY) 
+    public function __construct($titulo, $legenda, $nomeEixoX, $tipoColunaX, $nomeEixoY, $arrayValorX, $arrayValorY) 
     {
         parent::setTitulo($titulo);
         $this->setLegenda($legenda);
         $this->setNomeEixoX($nomeEixoX);
+        $this->setTipoColunaX($tipoColunaX);
         $this->setNomeEixoY($nomeEixoY);
         parent::setArrayValorX($arrayValorX);
         parent::setArrayValorY($arrayValorY);
@@ -62,6 +64,26 @@ class Linha extends Grafico {
     }
 
     /**
+     * Get the value of tipoColunaX
+     */ 
+     public function getTipoColunaX()
+     {
+         return $this->tipoColunaX;
+     }
+ 
+     /**
+      * Set the value of tipoColunaX
+      *
+      * @return  self
+      */ 
+     public function setTipoColunaX($tipoColunaX)
+     {
+         $this->tipoColunaX = $tipoColunaX;
+ 
+         return $this;
+     }
+
+    /**
      * Get the value of nomeEixoY
      */ 
     public function getNomeEixoY()
@@ -100,64 +122,43 @@ class Linha extends Grafico {
         if (!$data) {
             return "Sem valores Informados!! ";
         }
+        if (!$this->getTipoColunaX() || ($this->getTipoColunaX() !== self::TIPO_NUMERO && $this->getTipoColunaX() !== self::TIPO_PALAVRA)
+        ) {
+            return "getTipoColunaX incorreto! Defina como: TIPO_PALAVRA ou TIPO_NUMERO.";
+        }
 
         $scriptJS = ""
             . "<script>"
             . "google.charts.load('current', {packages: ['corechart', 'line']});"
             . "google.charts.setOnLoadCallback(function() { "
-            . "    var arrayData = [];"
-            . "    arrayData.push(['Table', '" . $this->getLegenda() . "']);";
-            
-            foreach ($data as $chave => $valor) {
-                $scriptJS .= "arrayData.push(['{$valor[0]}', {$valor[1]}]);";
+
+            . "    var data = new google.visualization.DataTable();"
+            . "    data.addColumn('" . $this->getTipoColunaX() ."', 'COLUNA01');"
+            . "    data.addColumn('number', '" . $this->getLegenda() . "'); /*SEGUNDA COLUNA NÃO PODE SER PALAVRA*/";
+
+            if ($this->getTipoColunaX() === self::TIPO_PALAVRA) {
+                foreach ($data as $chave => $valor) {
+                    $scriptJS .= "data.addRows([['{$valor[0]}', {$valor[1]}]]);";
+                }
+            }
+            if ($this->getTipoColunaX() === self::TIPO_NUMERO) {
+                foreach ($data as $chave => $valor) {
+                    $scriptJS .= "data.addRows([[{$valor[0]}, {$valor[1]}]]);";
+                }
             }
 
             $scriptJS .= ""
-            . "    var data = google.visualization.arrayToDataTable(arrayData);"
             . "    var options = { "
             . "        title: '" . parent::getTitulo() . "',"
-            . "        chartArea: {width: '50%'},"
             . "        hAxis: { title: '" . $this->getNomeEixoY() ."', minValue: 0 },"
             . "        vAxis: { title: '" . $this->getNomeEixoX() . "'}"
             . "    };"
-            . "    var chart = new google.visualization.BarChart(document.getElementById('grafico_barra'));"
+            . "    var chart = new google.visualization.LineChart(document.getElementById('grafico_linha'));"
             . "    chart.draw(data, options);"
             . "});"
             . "</script>";
 
-        //return $scriptJS;
-        $a = "<script>
-        google.charts.load('current', {packages: ['corechart', 'line']});
-        google.charts.setOnLoadCallback(drawBasic);
-        
-        function drawBasic() {
-        
-            //titulo, legenda, nomeEixoX, nomeEixoY, arrayPontos
-        
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', '1X111');
-            data.addColumn('number', 'Dogs'); //SEGUNDA COLUNA NÃO PODE SER PALAVRA
-        
-            data.addRows([
-                ['teste', 0],   ['teste', 10]
-            ]);
-        
-            var options = {
-                title: 'Dogs 123',
-                hAxis: {
-                    title: 'Time'
-                },
-                vAxis: {
-                    title: 'Popularity'
-                }
-            };
-        
-            var chart = new google.visualization.LineChart(document.getElementById('grafico_linha'));
-        
-            chart.draw(data, options);
-        }
-        </script>";
-        return $a;
+        return $scriptJS;
     }
 
     public function __toString() {

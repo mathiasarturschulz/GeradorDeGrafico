@@ -18,7 +18,7 @@
     */
 
     $titulo = "Cinco Cidades mais Populosas do Brasil";
-    $legenda = "Número de Habitantes por Cidade";
+    $legenda = "Nº Habitantes por Cidade";
     $nomeEixoX = "Cidade";
     $nomeEixoY = "Total de Habitantes (em milhões)";
     $arrayEixoX = [
@@ -39,7 +39,8 @@
     $oBarra = new Barra($titulo, $legenda, $nomeEixoX, $nomeEixoY, $arrayEixoX, $arrayEixoY);
     echo $oBarra->gerarGrafico();
 
-    $oLinha = new Linha($titulo, $legenda, $nomeEixoX, $nomeEixoY, $arrayEixoX, $arrayEixoY);
+    $tipoColunaX = Linha::TIPO_PALAVRA;
+    $oLinha = new Linha($titulo, $legenda, $nomeEixoX, $tipoColunaX, $nomeEixoY, $arrayEixoX, $arrayEixoY);
     echo $oLinha->gerarGrafico();
     
 ?>
